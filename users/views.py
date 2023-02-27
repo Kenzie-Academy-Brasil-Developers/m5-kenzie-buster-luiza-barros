@@ -25,3 +25,12 @@ class UserDetailsView(APIView):
         user = get_object_or_404(User, id=user_id)
         serializer = UserSerializer(user)
         return Response(serializer.data, status.HTTP_200_OK)
+
+    def patch(self, request, user_id):
+        user = get_object_or_404(User, id=user_id)
+
+        serializer = UserSerializer(user, request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+
+        return Response(serializer.data, status.HTTP_200_OK)
